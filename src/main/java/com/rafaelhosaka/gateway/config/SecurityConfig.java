@@ -48,7 +48,9 @@ public class SecurityConfig {
 
     public String[] getPublicPaths(){
         return new String[]{
-                "/api/auth/**"
+                "/api/auth/**",
+                "/api/video/pb/**",
+                "/api/user/pb/**"
         };
     }
 }
