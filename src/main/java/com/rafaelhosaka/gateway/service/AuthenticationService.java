@@ -1,5 +1,6 @@
 package com.rafaelhosaka.gateway.service;
 
+import com.rafaelhosaka.gateway.client.UserClient;
 import com.rafaelhosaka.gateway.dto.AuthenticationRequest;
 import com.rafaelhosaka.gateway.dto.AuthenticationResponse;
 import com.rafaelhosaka.gateway.dto.RegisterRequest;
@@ -20,6 +21,7 @@ public class AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
+    private final UserClient userClient;
 
     public AuthenticationResponse register(RegisterRequest request) throws Exception {
 
@@ -33,6 +35,7 @@ public class AuthenticationService {
                 .role(Role.USER)
                 .build();
         userRepository.save(user);
+
         var jwtToken = jwtService.generateToken(user);
         return AuthenticationResponse.builder()
                 .token(jwtToken)
@@ -44,8 +47,10 @@ public class AuthenticationService {
                 new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
         );
         var user = userRepository.findByEmail(request.getEmail()).orElseThrow();
+        var userResponse = userClient.findByEmail(user.getEmail());
         var jwtToken = jwtService.generateToken(user);
         return AuthenticationResponse.builder()
+                .user(userResponse.getBody())
                 .token(jwtToken)
                 .build();
     }

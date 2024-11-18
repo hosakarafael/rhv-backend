@@ -26,7 +26,6 @@ public class AuthenticationController {
         }catch (Exception e){
             return new ResponseEntity(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
-
     }
 
     @PostMapping("/authenticate")
