@@ -1,9 +1,7 @@
 package com.rafaelhosaka.gateway.service;
 
 import com.rafaelhosaka.gateway.client.UserClient;
-import com.rafaelhosaka.gateway.dto.AuthenticationRequest;
-import com.rafaelhosaka.gateway.dto.AuthenticationResponse;
-import com.rafaelhosaka.gateway.dto.RegisterRequest;
+import com.rafaelhosaka.gateway.dto.*;
 import com.rafaelhosaka.gateway.models.Role;
 import com.rafaelhosaka.gateway.models.User;
 import com.rafaelhosaka.gateway.repository.UserRepository;
@@ -12,6 +10,8 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.Date;
 
 @Service
 @RequiredArgsConstructor
@@ -23,7 +23,7 @@ public class AuthenticationService {
     private final AuthenticationManager authenticationManager;
     private final UserClient userClient;
 
-    public AuthenticationResponse register(RegisterRequest request) throws Exception {
+    public RegisterResponse register(RegisterRequest request) throws Exception {
 
         if(userRepository.findByEmail(request.getEmail()).isPresent()){
             throw new Exception("User with email "+request.getEmail()+" already exists");
@@ -35,9 +35,17 @@ public class AuthenticationService {
                 .role(Role.USER)
                 .build();
         userRepository.save(user);
+        var userResponse = userClient.createUser(new UserRequest(
+                null,
+                request.getName(),
+                user.getEmail(),
+                null,
+                new Date()
+        ));
 
         var jwtToken = jwtService.generateToken(user);
-        return AuthenticationResponse.builder()
+        return RegisterResponse.builder()
+                .user(userResponse.getBody())
                 .token(jwtToken)
                 .build();
     }
