@@ -1,9 +1,6 @@
 package com.rafaelhosaka.gateway.controller;
 
-import com.rafaelhosaka.gateway.dto.AuthenticationRequest;
-import com.rafaelhosaka.gateway.dto.AuthenticationResponse;
-import com.rafaelhosaka.gateway.dto.RegisterRequest;
-import com.rafaelhosaka.gateway.dto.RegisterResponse;
+import com.rafaelhosaka.gateway.dto.*;
 import com.rafaelhosaka.gateway.service.AuthenticationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -21,16 +18,20 @@ public class AuthenticationController {
     private final AuthenticationService authenticationService;
 
     @PostMapping("/register")
-    public ResponseEntity<RegisterResponse> register(@RequestBody RegisterRequest request){
+    public ResponseEntity<Response> register(@RequestBody RegisterRequest request){
         try{
             return ResponseEntity.ok(authenticationService.register(request));
         }catch (Exception e){
-            return new ResponseEntity(e.getMessage(), HttpStatus.BAD_REQUEST);
+            return ResponseEntity.badRequest().body(new Response(e.getMessage()));
         }
     }
 
     @PostMapping("/authenticate")
-    public ResponseEntity<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest request){
-        return ResponseEntity.ok(authenticationService.authenticate(request));
+    public ResponseEntity<Response> authenticate(@RequestBody AuthenticationRequest request){
+        try{
+            return ResponseEntity.ok(authenticationService.authenticate(request));
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body(new Response(e.getMessage()));
+        }
     }
 }

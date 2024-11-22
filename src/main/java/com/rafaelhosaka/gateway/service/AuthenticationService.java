@@ -5,6 +5,7 @@ import com.rafaelhosaka.gateway.dto.*;
 import com.rafaelhosaka.gateway.models.Role;
 import com.rafaelhosaka.gateway.models.User;
 import com.rafaelhosaka.gateway.repository.UserRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -50,11 +51,20 @@ public class AuthenticationService {
                 .build();
     }
 
-    public AuthenticationResponse authenticate(AuthenticationRequest request) {
+    public AuthenticationResponse authenticate(AuthenticationRequest request) throws Exception {
+        if(request.getEmail() == null || request.getEmail().isEmpty()){
+            throw new Exception("Email cannot be empty");
+        }
+
+        if(request.getPassword() == null || request.getPassword().isEmpty()){
+            throw new Exception("Password cannot be empty");
+        }
+
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
         );
-        var user = userRepository.findByEmail(request.getEmail()).orElseThrow();
+        var user = userRepository.findByEmail(request.getEmail())
+                .orElseThrow(() -> new EntityNotFoundException("Video with Email "+request.getEmail()+" not found"));
         var userResponse = userClient.findByEmail(user.getEmail());
         var jwtToken = jwtService.generateToken(user);
         return AuthenticationResponse.builder()
