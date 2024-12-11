@@ -9,4 +9,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Response {
     private String message;
+    private ErrorCode errorCode;
+
+    public Response(String message){
+        setMessage(message);
+        setErrorCode(ErrorCode.DEFAULT);
+    }
 }

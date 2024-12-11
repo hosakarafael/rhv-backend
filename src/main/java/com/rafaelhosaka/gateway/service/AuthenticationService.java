@@ -51,13 +51,13 @@ public class AuthenticationService {
                 .build();
     }
 
-    public AuthenticationResponse authenticate(AuthenticationRequest request) throws Exception {
+    public Response authenticate(AuthenticationRequest request) throws Exception {
         if(request.getEmail() == null || request.getEmail().isEmpty()){
-            throw new Exception("Email cannot be empty");
+            return new Response("Email cannot be empty", ErrorCode.EMAIL_EMPTY);
         }
 
         if(request.getPassword() == null || request.getPassword().isEmpty()){
-            throw new Exception("Password cannot be empty");
+            return new Response("Password cannot be empty", ErrorCode.PASSWORD_EMPTY);
         }
 
         authenticationManager.authenticate(

@@ -5,6 +5,7 @@ import com.rafaelhosaka.gateway.service.AuthenticationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,10 +29,12 @@ public class AuthenticationController {
 
     @PostMapping("/authenticate")
     public ResponseEntity<Response> authenticate(@RequestBody AuthenticationRequest request){
-        try{
+        try {
             return ResponseEntity.ok(authenticationService.authenticate(request));
+        }catch (BadCredentialsException e){
+            return ResponseEntity.badRequest().body(new Response(e.getMessage(), ErrorCode.BAD_CREDENTIALS));
         }catch (Exception e){
-            return ResponseEntity.badRequest().body(new Response(e.getMessage()));
+            return ResponseEntity.badRequest().body(new Response(e.getMessage(), ErrorCode.EXCEPTION));
         }
     }
 }
