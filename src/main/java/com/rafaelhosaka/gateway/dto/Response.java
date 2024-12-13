@@ -12,7 +12,7 @@ public class Response {
     private ErrorCode errorCode;
 
     public Response(String message){
-        setMessage(message);
-        setErrorCode(ErrorCode.DEFAULT);
+        this.message = message;
+        this.errorCode = ErrorCode.DEFAULT;
     }
 }
