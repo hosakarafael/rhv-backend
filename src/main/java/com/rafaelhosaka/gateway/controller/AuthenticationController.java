@@ -32,9 +32,9 @@ public class AuthenticationController {
         try {
             return ResponseEntity.ok(authenticationService.authenticate(request));
         }catch (BadCredentialsException e){
-            return ResponseEntity.badRequest().body(new Response(e.getMessage(), ErrorCode.BAD_CREDENTIALS));
+            return ResponseEntity.badRequest().body(new Response(e.getMessage(), ErrorCode.AS_BAD_CREDENTIALS));
         }catch (Exception e){
-            return ResponseEntity.badRequest().body(new Response(e.getMessage(), ErrorCode.EXCEPTION));
+            return ResponseEntity.badRequest().body(new Response(e.getMessage(), ErrorCode.AS_EXCEPTION));
         }
     }
 }

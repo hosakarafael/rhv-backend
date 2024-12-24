@@ -53,11 +53,11 @@ public class AuthenticationService {
 
     public Response authenticate(AuthenticationRequest request) throws Exception {
         if(request.getEmail() == null || request.getEmail().isEmpty()){
-            return new Response("Email cannot be empty", ErrorCode.EMAIL_EMPTY);
+            return new Response("Email cannot be empty", ErrorCode.AS_EMAIL_EMPTY);
         }
 
         if(request.getPassword() == null || request.getPassword().isEmpty()){
-            return new Response("Password cannot be empty", ErrorCode.PASSWORD_EMPTY);
+            return new Response("Password cannot be empty", ErrorCode.AS_PASSWORD_EMPTY);
         }
 
         authenticationManager.authenticate(
