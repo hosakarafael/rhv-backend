@@ -26,6 +26,10 @@ public class AuthUser implements UserDetails {
     private String password;
     @Enumerated(EnumType.STRING)
     private Role role;
+    private boolean enabled;
+    private boolean accountExpired;
+    private boolean credentialExpired;
+    private boolean accountLocked;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -39,21 +43,21 @@ public class AuthUser implements UserDetails {
 
     @Override
     public boolean isAccountNonExpired() {
-        return true;
+        return !accountExpired;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return true;
+        return !accountLocked;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return true;
+        return !credentialExpired;
     }
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return enabled;
     }
 }

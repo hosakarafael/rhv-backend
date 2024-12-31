@@ -44,6 +44,10 @@ public class AuthenticationService {
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .role(Role.USER)
+                .accountExpired(false)
+                .accountLocked(false)
+                .credentialExpired(false)
+                .enabled(true)
                 .build();
         userRepository.save(user);
         var userResponse = userClient.createUser(new UserRequest(
