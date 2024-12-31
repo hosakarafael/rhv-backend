@@ -3,7 +3,7 @@ package com.rafaelhosaka.gateway.service;
 import com.rafaelhosaka.gateway.client.UserClient;
 import com.rafaelhosaka.gateway.dto.*;
 import com.rafaelhosaka.gateway.models.Role;
-import com.rafaelhosaka.gateway.models.User;
+import com.rafaelhosaka.gateway.models.AuthUser;
 import com.rafaelhosaka.gateway.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -24,13 +24,23 @@ public class AuthenticationService {
     private final AuthenticationManager authenticationManager;
     private final UserClient userClient;
 
-    public RegisterResponse register(RegisterRequest request) throws Exception {
+    public Response register(RegisterRequest request) {
 
         if(userRepository.findByEmail(request.getEmail()).isPresent()){
-            throw new Exception("User with email "+request.getEmail()+" already exists");
+            return new Response("User with email "+request.getEmail()+" already exists", ErrorCode.AS_DUPLICATE_EMAIL);
+        }
+        if(request.getEmail() == null || request.getEmail().isEmpty()){
+            return new Response("Email cannot be empty", ErrorCode.AS_EMAIL_EMPTY);
         }
 
-        var user = User.builder()
+        if(request.getPassword() == null || request.getPassword().isEmpty()){
+            return new Response("Password cannot be empty", ErrorCode.AS_PASSWORD_EMPTY);
+        }
+        if(request.getName() == null || request.getName().isEmpty()){
+            return new Response("Name cannot be empty", ErrorCode.AS_NAME_EMPTY);
+        }
+
+        var user = AuthUser.builder()
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .role(Role.USER)
@@ -40,7 +50,6 @@ public class AuthenticationService {
                 null,
                 request.getName(),
                 user.getEmail(),
-                null,
                 new Date()
         ));
 
