@@ -9,10 +9,10 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.rafaelhosaka</groupId>
-	<artifactId>api-gateway</artifactId>
+	<artifactId>rhv-backend</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>api-gateway</name>
-	<description>API-Gateway fro RHV</description>
+	<description>RHV</description>
 	<url/>
 	<licenses>
 		<license/>
@@ -86,6 +86,21 @@
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-test</artifactId>
 			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.cloudinary</groupId>
+			<artifactId>cloudinary-http5</artifactId>
+			<version>2.0.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.cloudinary</groupId>
+			<artifactId>cloudinary-taglib</artifactId>
+			<version>2.0.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.bytedeco</groupId>
+			<artifactId>javacv-platform</artifactId>
+			<version>1.5.8</version>
 		</dependency>
 	</dependencies>
 	<dependencyManagement>
